@@ -22,6 +22,7 @@ trigger LeadingCompetitor on Opportunity (before insert, before update) {
             }
         }
         opp.Leading_Competitor__c = competitors.get(lowestPricePosition);
+        opp.Leading_Competitor_price__c= lowestPrice;
     }
 
 }
