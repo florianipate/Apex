@@ -12,6 +12,16 @@ trigger LeadingCompetitor on Opportunity (before insert, before update) {
         competitors.add(opp.Competitor_2__c);
         competitors.add(opp.Competitor_3__c);
 
+        Decimal lowestPrice;
+        Integer lowestPricePosition;
+        for (Integer i = 0; i< competitorPrices.size(); i++ ){
+            Decimal currentPrice = competitorPrices.get(i);
+            if(lowestPrice == null || competitorPrices.get(i) > lowestPrice) {
+                lowestPrice         = competitorPrices.get(i);
+                lowestPricePosition = i;
+            }
+        }
+        opp.Leading_Competitor__c = competitors.get(lowestPricePosition);
     }
 
 }
