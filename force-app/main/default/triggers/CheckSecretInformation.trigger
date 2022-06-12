@@ -1,4 +1,4 @@
-trigger CheckSecretInformation on Case ( after insert, before update) {
+trigger CheckSecretInformation on Case (after insert, before update) {
 
     String childCaseSubject = 'Worning Parent Case Contain Secret Info';
 
