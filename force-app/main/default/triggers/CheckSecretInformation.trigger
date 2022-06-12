@@ -2,7 +2,7 @@ trigger CheckSecretInformation on Case ( after insert, before update) {
 
     // create a collection containing all secreat keywords
     Set<String> secreatKeywords = new Set<String>();
-    secreatKeywords.add('Credit Card')
+    secreatKeywords.add('Credit Card');
     secreatKeywords.add('Social Secirity');
     secreatKeywords.add('SSN');
     secreatKeywords.add('Password');
@@ -12,8 +12,8 @@ trigger CheckSecretInformation on Case ( after insert, before update) {
     for(Case myCase: Trigger.new){
         
        for(String keyword: secreatKeywords){
-            if(myCase.Description != null && myCase.Description.containsIgnorCase(keyword)){
-                casesWithSecreatInfo.add(Case);
+            if(myCase.Description != null && myCase.Description.containsIgnoreCase(keyword)){
+                casesWithSecreatInfo.add(myCase);
                 System.debug('Case ' + myCase.Id + 'includes keyword' + keyword);
                 break;
             }
