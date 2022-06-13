@@ -14,7 +14,7 @@ public class LeadingCompetitorsTest {
 
         opp.Competitor_1_Price__c = 5000;
         opp.Competitor_2_Price__c = 5000;
-        opp.Competitor_3_Price__c = 5000;
+        opp.Competitor_3_Price__c = 5000; 
 
         insert opp;
         System.debug('Opportunity' + opp.Name + 'inserted with all competitor fields populated');
