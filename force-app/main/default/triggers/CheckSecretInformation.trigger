@@ -12,13 +12,21 @@ trigger CheckSecretInformation on Case (after insert, before update) {
 
     // check if the case contain any o f the keywords
     List<Case> casesWithSecreatInfo = new List<Case>();
+    Set<String> sensitiveKeyWords = new Set<String>();
     for(Case myCase: Trigger.new){
         if(myCase.Subject != childCaseSubject){
             for(String keyword: secreatKeywords){
                 if(myCase.Description != null && myCase.Description.containsIgnoreCase(keyword)){
-                    casesWithSecreatInfo.add(myCase);
+                    sensitiveKeyWords.add(keyword);
+                    // casesWithSecreatInfo.add(myCase);
                     System.debug('Case ' + myCase.Id + 'includes keyword' + keyword);
-                    break;
+                    // break;
+                }
+                if(casesWithSecreatInfo.contains(myCase)){
+                    continue;
+                    
+                } else {
+                    casesWithSecreatInfo.add(myCase);
                 }
             }
         }
@@ -32,7 +40,7 @@ trigger CheckSecretInformation on Case (after insert, before update) {
         childCase.ParentId      = caseWithSecreatInfo.Id;
         childCase.IsEscalated   = true;
         childCase.Priority      = 'High';
-        childCase.Description   = 'At least one of the following keywords wer found';
+        childCase.Description   = 'The following keywords wer found '+ secreatKeywords;
         casesToCreate.add(childCase);
     }
     insert casesToCreate;
