@@ -25,6 +25,7 @@ trigger CheckSecretInformation on Case (after insert, before update) {
     }
 
      // if the cade contain secreat keywords then create a child case
+     List<Case> casesToCreate = new List<Case>();
      for(Case caseWithSecreatInfo : casesWithSecreatInfo){
         Case childCase          = new Case();
         childCase.Subject       = childCaseSubject;
@@ -32,7 +33,7 @@ trigger CheckSecretInformation on Case (after insert, before update) {
         childCase.IsEscalated   = true;
         childCase.Priority      = 'High';
         childCase.Description   = 'At least one of the following keywords wer found';
-        insert childCase;
+        casesToCreate.add(childCase);
     }
-
+    insert casesToCreate;
 }
