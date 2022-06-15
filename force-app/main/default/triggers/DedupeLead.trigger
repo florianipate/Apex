@@ -1,5 +1,10 @@
 trigger DedupeLead on Lead (before insert) {
-
+    
+    // Get data quality record for future use
+    Group dataQualityGroup = [SELECT id 
+                                        FROM Group 
+                                        WHERE DeveloperName = 'Data_Quality' 
+                                        LIMIT 1];
     for (Lead myLead: Trigger.new){
 
         // search for matching contacts
@@ -12,10 +17,6 @@ trigger DedupeLead on Lead (before insert) {
         if(!matchengContacts.isEmpty()){
 
             // assign the lead to the data quality Queue  
-            Group dataQualityGroup = [SELECT id 
-                                        FROM Group 
-                                        WHERE DeveloperName = 'Data_Quality' 
-                                        LIMIT 1];
             myLead.OwnerId = dataQualityGroup.Id;
 
             // add the duplicated Ids in to the lead Description
