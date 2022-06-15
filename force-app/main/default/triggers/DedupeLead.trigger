@@ -11,11 +11,22 @@ trigger DedupeLead on Lead (before insert) {
         // if matching are finded
         if(!matchengContacts.isEmpty()){
 
-            //  
+            // assign the lead to the data quality Queue  
             Group dataQualityGroup = [SELECT id 
                                         FROM Group 
                                         WHERE DeveloperName = 'Data_Quality' 
                                         LIMIT 1];
+            myLead.OwnerId = dataQualityGroup.Id;
+
+            // add the duplicated Ids in to the lead Description
+            String dupeContactsMessage = 'Duplicate Contact(s) found:\n';
+            for (Contact matchingContact : matchengContacts){
+                dupeContactsMessage += matchingContact.FirstName + ' '
+                                    + matchingContact.LastName + ' '
+                                    + matchingContact.Account.Name + ' ('
+                                    + matchingContact.Id + ')\n';
+            }
+            myLead.Description = dupeContactsMessage + '\n' + myLead.Description;
         }
     }
 }
