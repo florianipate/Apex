@@ -15,5 +15,6 @@ trigger WarrantySummary on Case (before insert) {
                                     + 'Extended Warranty: ' + hasExtendedWarranty + '\n'
                                     + 'Have a nice day!';
     }
+    
 
 }
