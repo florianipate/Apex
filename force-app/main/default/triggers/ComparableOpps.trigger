@@ -3,20 +3,23 @@ trigger ComparableOpps on Opportunity (after insert) {
     for(Opportunity opp:Trigger.new){
         //query Account Info
         Opportunity oppWithAccountInfo = [SELECT Id,
-                                                 Account.Industry
+
+                                                 Account.Industry,
                                             FROM Opportunity
                                            WHERE Id = :opp.Id];
         // Get the binding variables ready
         Decimal minAmount = opp.Amount * 0.9;
         Decimal maxAmmount = opp.amount * 1.1;
         // search for the comparable opps
-        List<Opportunity> comparableOpps =[SELECT Id 
+        List<Opportunity> comparableOpps =[SELECT Id,
+                                                 OwnerId 
                                             FROM Opportunity
                                            WHERE Amount>= :minAmount
                                              AND Amount <= :maxAmmount
                                              AND Account.Industry = :oppWithAccountInfo.Account.Industry
                                              AND StageName = 'Closed Won'
                                              AND CloseDate >= LAST_N_DAYS:365
+                                             AND Owner.Position_Start_Date__c < LAST_N_DAYS:365
                                              AND Id != :opp.Id];
         System.debug('Comparable opp(s) Found ' + comparableOpps);
 
