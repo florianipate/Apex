@@ -3,16 +3,14 @@ trigger ComparableOpps on Opportunity (after insert) {
     for(Opportunity opp:Trigger.new){
         //query Account Info
         Opportunity oppWithAccountInfo = [SELECT Id,
-
-                                                 Account.Industry,
+                                                 Account.Industry
                                             FROM Opportunity
                                            WHERE Id = :opp.Id];
         // Get the binding variables ready
         Decimal minAmount = opp.Amount * 0.9;
         Decimal maxAmmount = opp.amount * 1.1;
         // search for the comparable opps
-        List<Opportunity> comparableOpps =[SELECT Id,
-                                                 OwnerId 
+        List<Opportunity> comparableOpps =[SELECT Id 
                                             FROM Opportunity
                                            WHERE Amount>= :minAmount
                                              AND Amount <= :maxAmmount
